@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+        "
+>
+    <!--声明aop-->
+    <context:component-scan base-package="com.spring.autowired.demo.annotion"/>
+    <context:property-placeholder location="classpath:com.soundsystem"/>
+    <bean id="audience" class="com.spring.aop.one.Audience"></bean>
+    <bean id="audience12" class="com.spring.aop.one.Audience1"></bean>
+    <bean id="performance" class="com.spring.aop.perfromace.Dance"></bean>
+    <aop:config>
+        <!--声明切面，切面包含切入点和通知-->
+        <aop:pointcut id="trackPlayed"
+                      expression="execution(* com.spring.demo.CompactDisc.playTrack(int)) and args(int)"/>
+        <aop:pointcut  id="audCut"
+                       expression="execution(* com.spring.aop.perfromace.Performance.perform(..))" />
+        <aop:aspect>
+            <aop:declare-parents types-matching="com.spring.aop.perfromace.Performance+"
+                                 implement-interface="com.spring.aop.Encoreable"
+                                 default-impl="com.spring.aop.aspect.DefaultEncoreable"/>
+        </aop:aspect>
+
+        <aop:aspect ref="audience">
+            <!--就座-->
+            <aop:before method="tackSeats" pointcut-ref="audCut"/>
+            <!--保持手机静音-->
+            <aop:before method="silenceCellPhones" pointcut-ref="audCut"/>
+            <!--表演成功，鼓掌-->
+            <aop:after-returning method="applause" pointcut-ref="audCut"/>
+            <!--表演失败，退钱-->
+            <aop:after-throwing method="demandRefund" pointcut-ref="audCut"/>
+        </aop:aspect>
+
+        <aop:aspect ref="audience12">
+            <aop:around method="watchPerformance" pointcut-ref="audCut"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>

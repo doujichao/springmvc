@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
+<script type="text/javascript" >
+    function change(){
+        $("#sd").html("<font color='red'>你好</font>");
+
+    }
+
+</script>
+<body>
+<div>
+    <span id="sd"></span>
+</div>
+<input type="button" value="改变颜色" onclick="change()">
+<input type="button" onclick="chick()" value="test"/>
+<select id="select">
+    <option value="1" name="男" selected="selected">男</option>
+    <option value="2">女</option>
+</select>
+
+<input type="radio" checked="checked">
+
+<input type="text" name="name" id="name">
+<input type="button" onclick="chickNum()" value="checkNum">
+
+</body>
+<script type="text/javascript">
+    function chickNum(){
+        var name=document.getElementById("name");
+        var value=name.value;
+        alert(!isNaN(value));
+    }
+
+    function chick() {
+        var select=document.getElementById("select");
+        var value;
+        var options=select.options;
+        var val;
+        for(var i=0;i<options.length;i++){
+            if(options[i].selected==true){
+                val=options[i].text;
+                value=options[i].value;
+            }
+        }
+        alert(val);
+        alert(value);
+    }
+</script>
+</html>
